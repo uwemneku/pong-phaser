@@ -28,10 +28,6 @@ class TitleScene extends Phaser.Scene {
       this.scene.start(SceneKeys.GameScreen);
     });
   }
-
-  update(time: number, delta: number): void {
-    // console.log(time);
-  }
 }
 
 export default TitleScene;
