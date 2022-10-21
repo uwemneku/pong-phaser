@@ -1,4 +1,5 @@
 import Phaser, { Math } from "phaser";
+import { Color, SceneKeys } from "../constants";
 import WebFontFile from "../utils/WebFontFile";
 
 type ScoreText = { updateScore: () => void };
@@ -11,7 +12,7 @@ export default class GameScene extends Phaser.Scene {
   leftScore!: ScoreText;
   rightScore!: ScoreText;
   constructor() {
-    super({ key: "gameScreen" });
+    super({ key: SceneKeys.GameScreen });
   }
 
   preload() {
@@ -19,15 +20,16 @@ export default class GameScene extends Phaser.Scene {
     this.load.addFile(fonts);
   }
   create() {
-    this.scene.run("gameBackground");
-    this.scene.sendToBack("gameBackground");
+    this.scene.run(SceneKeys.GameBackground);
+    this.scene.sendToBack(SceneKeys.GameBackground);
     this.physics.world.setBounds(-100, 0, 1000, 500);
     this.ball = this.physics.add.existing(
       this.add.circle(400, 250, 10, 0xffff, 1),
       false
     ) as Phaser.Types.Physics.Arcade.GameObjectWithDynamicBody;
     this.ball.body.setCollideWorldBounds(true, 1, 1);
-    this.resetBall();
+    this.ball.body.setCircle(10);
+    // this.resetBall();
 
     this.paddleLeft = this.createPaddle(50, 250);
     this.paddleRight = this.createPaddle(750, 250);
@@ -38,6 +40,8 @@ export default class GameScene extends Phaser.Scene {
     this.rightScore = this.createText(500, 125);
 
     this.cursor = this.input.keyboard.createCursorKeys();
+
+    this.time.delayedCall(1500, () => this.resetBall());
   }
 
   update() {
@@ -47,7 +51,7 @@ export default class GameScene extends Phaser.Scene {
   }
   createPaddle(x: number, y: number) {
     const paddle = this.physics.add.existing(
-      this.add.rectangle(x, y, 30, 100, 0xffffff, 1)
+      this.add.rectangle(x, y, 30, 100, Color.white, 1)
     ) as Phaser.Types.Physics.Arcade.GameObjectWithDynamicBody;
     paddle.body.setImmovable(true);
     paddle.body.allowGravity = false;
@@ -90,15 +94,13 @@ export default class GameScene extends Phaser.Scene {
     const x = this.ball.body.x;
     if (x < -30) {
       this.rightScore.updateScore();
-      console.log("yo");
-
-      this.resetBall();
     } else if (x > 830) {
       this.leftScore.updateScore();
-      // score on the right side
-      this.resetBall();
-      console.log("yop");
     }
+    if (x < -30 || x > 830) {
+      this.resetBall();
+    }
+
     this.ball.body.velocity.x *= 1.0001;
     this.ball.body.velocity.y *= 1.0001;
   }

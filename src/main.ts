@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { SceneKeys } from "./constants";
 import GameBackground from "./scenes/Background";
 import GameScene from "./scenes/Game";
 import TitleScene from "./scenes/TitleScreen";
@@ -18,7 +19,7 @@ const config: Phaser.Types.Core.GameConfig = {
 };
 
 const game = new Phaser.Game(config);
-game.scene.add("titleScreen", TitleScene);
-game.scene.add("gameScreen", GameScene);
-game.scene.add("gameBackground", GameBackground);
-game.scene.start("gameScreen");
+game.scene.add(SceneKeys.TitleScreen, TitleScene);
+game.scene.add(SceneKeys.GameScreen, GameScene);
+game.scene.add(SceneKeys.GameBackground, GameBackground);
+game.scene.start(SceneKeys.TitleScreen);
