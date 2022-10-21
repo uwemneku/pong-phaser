@@ -14,6 +14,12 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+html {
+  background-color: rgb(67, 65, 65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 a {
   font-weight: 500;
